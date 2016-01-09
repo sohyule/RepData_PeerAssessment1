@@ -242,7 +242,7 @@ table(dt2$weekend)
 ##   12960    4608
 ```
 
-Create a time series comparing weekend and weekdays.  
+Create a time series comparing **weekends and weekdays**.  
 
 
 ```r

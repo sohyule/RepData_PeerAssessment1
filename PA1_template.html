@@ -192,7 +192,7 @@ table(dt2$weekend)</code></pre>
 <pre><code>## 
 ## weekday weekend 
 ##   12960    4608</code></pre>
-<p>Create a time series comparing weekend and weekdays.</p>
+<p>Create a time series comparing <strong>weekends and weekdays</strong>.</p>
 <pre class="r"><code>activityData&lt;-dt2[,.(steps=mean(steps)),by=.(weekend,interval)]
 activityData$myinterval&lt;- rep(seq(0,1435,length.out=288),2)
 xyplot(steps~myinterval|weekend,type=&quot;l&quot;,data=activityData,lwd=2,groups=weekend,xlab=&quot;Interval&quot;)</code></pre>

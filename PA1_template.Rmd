@@ -164,7 +164,7 @@ dt2[,weekend:=ifelse(weekdays(date) %in% weekday,"weekday","weekend")]
 table(dt2$weekend)
 ```
 
-Create a time series comparing weekend and weekdays.  
+Create a time series comparing **weekends and weekdays**.  
 
 ```{r, echo=TRUE}
 activityData<-dt2[,.(steps=mean(steps)),by=.(weekend,interval)]
