@@ -7,7 +7,6 @@ The assignment requires to load a data set **activity.csv** and produce summarie
 
 ## Data
 
-
 The variables included in this dataset are:
 
 * **steps**: Number of steps taking in a 5-minute interval (missing
@@ -21,14 +20,15 @@ The variables included in this dataset are:
 
 ## Loading and preprocessing the data  
 
-
 Load data and convert **date** from character to date type, then create data.table.
 
 
 ```r
+library(data.table)
+library(lattice)
+
 df<-read.csv("activity.csv")
 df$date <- as.Date(df$date)
-library(data.table)
 dt<-as.data.table(df)
 str(dt)
 ```
@@ -43,20 +43,11 @@ str(dt)
 
 ## What is mean total number of steps taken per day?
 
-
-```r
-total_steps = dt[,list(sum=sum(steps)),by=date]
-
-hist(total_steps$sum,xlab="Number of Steps",ylab="Number of Days",
-     breaks=30,main="Total Number of Steps taken per Day",col="green")
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)\
-
 The **mean** and **median** of the total steps per day.
 
 
 ```r
+total_steps = dt[,list(sum=sum(steps)),by=date]
 mean_total_steps <- mean(total_steps$sum,na.rm=T)
 mean_total_steps
 ```
@@ -74,11 +65,19 @@ median_total_steps
 ## [1] 10765
 ```
 
+Histogram.  
+
+
+```r
+hist(total_steps$sum,xlab="Number of Steps",ylab="Number of Days",
+     breaks=30,main="Total Number of Steps taken per Day",col="green")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)\
 
 ## What is the average daily activity pattern?  
 
-
-Time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.    
+Time series plot of the **5-minute interval** and the average number of steps taken, averaged across all days.    
 
 
 ```r
@@ -128,8 +127,7 @@ text(max_interval,-1, "9 AM")
 
 ## Imputing missing values  
 
-
-There are 2304 rows of missing **steps**.
+There are **2304** rows of missing **steps**.
 
 
 ```r
@@ -167,7 +165,7 @@ missing_days
 ## [6] "2012-11-10" "2012-11-14" "2012-11-30"
 ```
 
-Therefore, the only reasonable imputation is simply to use the mean steps for the intervals over all the other days.  
+Therefore, the only reasonable **imputation** is simply to use the mean steps for the intervals over all the other days.  
 
 
 ```r
@@ -176,7 +174,7 @@ dt2<-copy(dt)
 setkey(dt2,date)
 # change date type of steps from int to numeric, since the means are decimals
 dt2$steps<-as.numeric(dt2$steps)
-
+# fill up NAs with the means 
 for (d in missing_days){
         dt2[date==as.Date(d),"steps":=mean_steps_5min$steps]
 }
@@ -190,9 +188,8 @@ table(is.na(dt2))
 ## 52704
 ```
 
-Examine the total number of steps taken from the new data and compare with the old ones. 
-The **means** and the **medians** are virtually identical naturally because the imputation used amounts to adding the same data 8 times.  
-
+Examining the total number of steps taken from the new data and the old, one can see that 
+the **means** and the **medians** are virtually identical naturally because the imputation used amounts to adding the same data 8 times.  
 
 
 ```r
@@ -227,10 +224,7 @@ mtext("(NA imputed)",3,0)
 
 ![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)\
 
-
-
 ## Are there differences in activity patterns between weekdays and weekends?  
-
 
 Create a new variable **weekend**.  
 
@@ -252,7 +246,6 @@ Create a time series comparing weekend and weekdays.
 
 
 ```r
-library(lattice)
 activityData<-dt2[,.(steps=mean(steps)),by=.(weekend,interval)]
 activityData$myinterval<- rep(seq(0,1435,length.out=288),2)
 xyplot(steps~myinterval|weekend,type="l",data=activityData,lwd=2,groups=weekend,xlab="Interval")
