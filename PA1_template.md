@@ -85,7 +85,8 @@ Time series plot of the 5-minute interval and the average number of steps taken,
 mean_steps_5min <- dt[,.(steps=mean(steps,na.rm=TRUE)),by=interval]
 
 with(mean_steps_5min,
-     plot(interval,steps,type="l",xlab="Interval",ylab="Number of Steps", col="blue", main="Average Daily Activity"))
+        plot(interval,steps,type="l",xlab="Interval",ylab="Number of Steps", 
+        col="blue", main="Average Daily Activity"))
 mtext("(every 5 minutes, averaged over 61 days)",3,0)
 ```
 
@@ -105,7 +106,8 @@ With the new interval, x-axis becomes 24 hours and the maximum number of steps i
 
 ```r
 with(mean_steps_5min,
-     plot(myinterval,steps,type="l",xlab="Interval",ylab="Number of Steps",col="blue", main="Average Daily Activity"))
+        plot(myinterval,steps,type="l",xlab="Interval",ylab="Number of Steps",
+        col="blue", main="Average Daily Activity"))
 mtext("(every 5 minutes, averaged over 61 days)",3,0)
 
 max_interval<-mean_steps_5min[steps==max(steps),myinterval]
