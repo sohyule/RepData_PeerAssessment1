@@ -30,10 +30,6 @@ df<-read.csv("activity.csv")
 df$date <- as.Date(df$date)
 library(data.table)
 dt<-as.data.table(df)
-```
-
-
-```r
 str(dt)
 ```
 
@@ -55,7 +51,8 @@ hist(total_steps$sum,xlab="Number of Steps",ylab="Number of Days",
      breaks=30,main="Total Number of Steps taken per Day",col="green")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)\
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)\
+
 The **mean** and **median** of the total steps per day.
 
 
@@ -87,11 +84,12 @@ Time series plot of the 5-minute interval and the average number of steps taken,
 ```r
 mean_steps_5min <- dt[,.(steps=mean(steps,na.rm=TRUE)),by=interval]
 
-with(mean_steps_5min,plot(interval,steps,type="l",xlab="Interval",ylab="Number of Steps", col="blue", main="Average Daily Activity"))
+with(mean_steps_5min,
+     plot(interval,steps,type="l",xlab="Interval",ylab="Number of Steps", col="blue", main="Average Daily Activity"))
 mtext("(every 5 minutes, averaged over 61 days)",3,0)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)\
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)\
 
 The given data's **interval** column has this irregularities; its 5 minute interval jumps 9 steps every 100th, eg., 55 100, 155 200, 255 300, etc., and the result is that although each day has 288 rows (24 hours x 60 minutes / 5 minutes) the interval ends at 2355, not at 1440. This makes x-axis of the histogram incomprehensible.  
 
@@ -106,7 +104,8 @@ With the new interval, x-axis becomes 24 hours and the maximum number of steps i
 
 
 ```r
-with(mean_steps_5min,plot(myinterval,steps,type="l",xlab="Interval",ylab="Number of Steps",col="blue", main="Average Daily Activity"))
+with(mean_steps_5min,
+     plot(myinterval,steps,type="l",xlab="Interval",ylab="Number of Steps",col="blue", main="Average Daily Activity"))
 mtext("(every 5 minutes, averaged over 61 days)",3,0)
 
 max_interval<-mean_steps_5min[steps==max(steps),myinterval]
@@ -122,7 +121,8 @@ abline(v=max_interval,lty=2)
 text(max_interval,-1, "9 AM")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)\
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)\
+
 
 ## Imputing missing values  
 
@@ -223,7 +223,7 @@ hist(total_steps2$sum,xlab="Number of Steps",ylab="Number of Days",
 mtext("(NA imputed)",3,0)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-12-1.png)\
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)\
 
 
 
@@ -256,7 +256,7 @@ activityData$myinterval<- rep(seq(0,1435,length.out=288),2)
 xyplot(steps~myinterval|weekend,type="l",data=activityData,lwd=2,groups=weekend,xlab="Interval")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)\
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)\
 
 The activity pattern that showed maximum steps around 9 AM on weekdays changes to lower number of steps spread throughout the day on weekends.  
 
